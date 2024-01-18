@@ -79,11 +79,11 @@ function handleCardClick(e) {
     noClicking = true;
     // debugger
     let gif1 = card1.className;
-    let gif2 = card2.classNAme;
+    let gif2 = card2.className;
 
-    if (gif1 == gif2) {
+    if (gif1 === gif2) {
       cardsFlipped += 2;
-      card1.removeEventLsitener("click", handleCardClick);
+      card1.removeEventListener("click", handleCardClick);
       card2.removeEventListener("click", handleCardClick);
       card1 = null;
       card2 = null;
@@ -101,7 +101,7 @@ function handleCardClick(e) {
     }
   }
   // you can use event.target to see which element was clicked
-  console.log("you just clicked", event.target);
+  console.log("you just clicked", e.target);
 
   if (cardsFlipped === COLORS.length) alert("Game over!");
 }
