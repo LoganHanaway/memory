@@ -62,7 +62,7 @@ function createDivsForColors(colorArray) {
 }
 
 // TODO: Implement this function!
-function handleCardClick(e) {
+/* function handleCardClick(e) {
   if (noClicking) return;
   if (e.target.classList.contains("flipped")) return;
 
@@ -104,7 +104,55 @@ function handleCardClick(e) {
   console.log("you just clicked", e.target);
 
   if (cardsFlipped === COLORS.length) alert("Game over!");
+} */
+
+// done a different way
+
+function handleCardClick(e) {
+  if (noClicking || e.target.classList.contains("flipped")) return;
+
+  const currentCard = e.target;
+  currentCard.style.backgroundColor = currentCard.classList[0];
+
+  if (!card1 || !card2) {
+    currentCard.classList.add("flipped");
+    card1 = card1 || currentCard;
+    card2 = (currentCard === card1) ? null : currentCard;
+  }
+
+  if (card1 && card2) {
+    noClicking = true;
+
+    const areCardsMatching = card1.className === card2.className;
+
+    if (areCardsMatching) {
+      cardsFlipped += 2;
+      card1 = null;
+      card2 = null;
+      noClicking = false;
+    } else {
+      setTimeout(() => {
+        card1.style.backgroundColor = "";
+        card2.style.backgroundColor = "";
+        card1.classList.remove('flipped');
+        card2.classList.remove("flipped");
+        card1 = null;
+        card2 = null;
+        noClicking = false;
+      }, 1000);
+    }
+  }
+
+  console.log("You just clicked", e.target);
+
+  if (cardsFlipped === COLORS.length) alert("Game over!");
 }
+
+
 
 // when the DOM loads
 createDivsForColors(shuffledColors);
+
+console.log("card1:", card1);
+console.log("card2:", card2);
+
