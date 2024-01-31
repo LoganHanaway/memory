@@ -4,7 +4,15 @@ let card2 = null;
 let cardsFlipped = 0;
 let noClicking = false;
 let score = 0;
+let lowestScore = localStorage.getItem('lowestScore') || Infinity;
 let scoreDisplay = document.getElementById("score");
+let lowestScoreDisplay = document.getElementById("lowestScoreDisplay");
+
+console.log('Lowest Score on load:', lowestScore);
+console.log('Lowest Score retrieved from local storage:', localStorage.getItem('lowestScore'));
+
+/* lowestScoreDisplay.textContent = 'Lowest Score: ' + (lowestScore === Infinity ? 'No games played' : lowestScore); */
+
 
 const COLORS = [
   "red",
@@ -63,56 +71,18 @@ function createDivsForColors(colorArray) {
   }
 }
 
-// TODO: Implement this function!
-/* function handleCardClick(e) {
-  if (noClicking) return;
-  if (e.target.classList.contains("flipped")) return;
 
-  let currentCard = e.target;
-  currentCard.style.backgroundColor = currentCard.classList[0];
-
-  if (!card1 || !card2) {
-    currentCard.classList.add("flipped");
-    card1 = card1 || currentCard;
-    card2 = currentCard === card1 ? null : currentCard;
-  }
-
-  if (card1 && card2) {
-    noClicking = true;
-    // debugger
-    let gif1 = card1.className;
-    let gif2 = card2.className;
-
-    if (gif1 === gif2) {
-      cardsFlipped += 2;
-      card1.removeEventListener("click", handleCardClick);
-      card2.removeEventListener("click", handleCardClick);
-      card1 = null;
-      card2 = null;
-      noClicking = false;
-    } else {
-      setTimeout(function() {
-        card1.style.backgroundColor = "";
-        card2.style.backgroundColor = "";
-        card1.classList.remove('flipped');
-        card2.classList.remove("flipped");
-        card1 = null;
-        card2 = null;
-        noClicking = false;
-      }, 1000);
-    }
-  }
-  // you can use event.target to see which element was clicked
-  console.log("you just clicked", e.target);
-
-  if (cardsFlipped === COLORS.length) alert("Game over!");
-} */
-
-// done a different way
 
 function handleCardClick(e) {
   score++;
-  scoreDisplay.textContent= "score: " + score;
+  scoreDisplay.textContent = 'Current Score: ' + score;
+/*   lowestScoreDisplay.textContent = 'Lowest Score: ' + (lowestScore === Infinity ? 'No games played' : lowestScore); */
+
+  if (score < lowestScore) {
+    lowestScore = score;
+    localStorage.setItem("lowestScore", lowestScore);
+    scoreDisplay.textContent = 'Score: ' + score;
+  };
 
   if (noClicking || e.target.classList.contains("flipped")) return;
 
@@ -123,7 +93,7 @@ function handleCardClick(e) {
     currentCard.classList.add("flipped");
     card1 = card1 || currentCard;
     card2 = (currentCard === card1) ? null : currentCard;
-  }
+  };
 
   if (card1 && card2) {
     noClicking = true;
@@ -139,19 +109,27 @@ function handleCardClick(e) {
       setTimeout(() => {
         card1.style.backgroundColor = "";
         card2.style.backgroundColor = "";
-        card1.classList.remove('flipped');
+        card1.classList.remove("flipped");
         card2.classList.remove("flipped");
         card1 = null;
         card2 = null;
         noClicking = false;
       }, 1000);
     }
-  }
+  };
 
   console.log("You just clicked", e.target);
 
-  if (cardsFlipped === COLORS.length) alert("Game over!");
-}
+  if (cardsFlipped === COLORS.length) {
+    if (score < lowestScore) {
+      lowestScore = score;
+      localStorage.setItem('lowestScore', lowestScore);
+    }
+    console.log('Updated Lowest Score:', lowestScore);
+    lowestScoreDisplay.textContent = 'Lowest Score: ' + lowestScore; // Update lowest score display
+    alert("Game over!");
+  };
+};
 
 // FURTHER STUDY
 
@@ -166,22 +144,28 @@ restartButton.addEventListener("click", function(){
   restartGame();
 });
 
-function startGame(){
+function startGame() {
   createDivsForColors(shuffledColors);
   beginButton.style.display = "none";
-  restartButton.style.display = "inline-block"
+  restartButton.style.display = "inline-block";
+  lowestScore = localStorage.getItem('lowestScore') || Infinity; // Update lowest score
+  lowestScoreDisplay.textContent = 'Lowest Score: ' + (lowestScore === Infinity ? 'No games played' : lowestScore);
+
+  console.log('Lowest Score at game start:', lowestScore);
 };
 
-function restartGame(){
-  document.getElementById('game').innerHTML = '';
+function restartGame() {
+  console.log('Lowest Score after restart:', lowestScore);
+  document.getElementById("game").innerHTML = "";
   card1 = null;
   card2 = null;
   cardsFlipped = 0;
   noClicking = false;
   score = 0
-  scoreDisplay.textContent= "score: " + score;
+  scoreDisplay.textContent = "Current Score: " + score;
   shuffle(COLORS);
-  startGame();
+  startGame(); // Update lowest score display
+  console.log('Lowest Score after restart:', lowestScore);
 };
 
 
