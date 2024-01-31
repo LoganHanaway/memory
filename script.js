@@ -148,10 +148,34 @@ function handleCardClick(e) {
   if (cardsFlipped === COLORS.length) alert("Game over!");
 }
 
+// FURTHER STUDY
+
+const beginButton = document.getElementById("begin-game-btn");
+const restartButton = document.getElementById("restart-game-btn");
+
+beginButton.addEventListener("click", function(){
+  startGame();
+});
+
+restartButton.addEventListener("click", function(){
+  restartGame();
+});
+
+function startGame(){
+  createDivsForColors(shuffledColors);
+  beginButton.style.display = "none";
+  restartButton.style.display = "inline-block"
+};
+
+function restartGame(){
+  document.getElementById('game').innerHTML = '';
+  shuffle(COLORS);
+  startGame();
+};
 
 
 // when the DOM loads
-createDivsForColors(shuffledColors);
+/* createDivsForColors(shuffledColors); */
 
 console.log("card1:", card1);
 console.log("card2:", card2);
