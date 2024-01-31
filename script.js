@@ -3,6 +3,8 @@ let card1 = null;
 let card2 = null;
 let cardsFlipped = 0;
 let noClicking = false;
+let score = 0;
+let scoreDisplay = document.getElementById("score");
 
 const COLORS = [
   "red",
@@ -109,6 +111,9 @@ function createDivsForColors(colorArray) {
 // done a different way
 
 function handleCardClick(e) {
+  score++;
+  scoreDisplay.textContent= "score: " + score;
+
   if (noClicking || e.target.classList.contains("flipped")) return;
 
   const currentCard = e.target;
@@ -169,9 +174,17 @@ function startGame(){
 
 function restartGame(){
   document.getElementById('game').innerHTML = '';
+  card1 = null;
+  card2 = null;
+  cardsFlipped = 0;
+  noClicking = false;
+  score = 0
+  scoreDisplay.textContent= "score: " + score;
   shuffle(COLORS);
   startGame();
 };
+
+
 
 
 // when the DOM loads
